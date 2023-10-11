@@ -15,7 +15,7 @@ Feature: Projects
 
     Given I set the base url and headers
     When I call to projects endpoint using "GET" method using the "project_id" as parameter
-    Then I receive a "200" status code in response
+    Then I receive a 200 status code in response
 
   Scenario: Verify POST project endpoint creates a project with the name provided
 
@@ -30,6 +30,18 @@ Feature: Projects
     When I call to projects endpoint using "DELETE" method using the "project_id" as parameter
     Then I receive a 204 status code in response
 
+  @project_id @wip
+  Scenario: Verify POST project endpoint updates a project with the name provided
+
+    Given I set the base url and headers
+    When I call to projects endpoint using "POST" method using the "update project data" as parameter
+    """
+    {
+      "name": "Project updated",
+      "color": "red"
+    }
+    """
+    Then I receive a 200 status code in response
   # Scenario: Verify POST project endpoint creates 3 projects with the names provided
 
   #   Given I set the base url and headers
