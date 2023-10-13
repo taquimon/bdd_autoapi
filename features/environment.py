@@ -30,6 +30,7 @@ def before_all(context):
     LOGGER.debug(projects)
     context.project_id_from_all = projects["body"][1]["id"]
 
+
 def before_feature(context, feature):
     context.feature_name = feature.name.lower()
     # context.url = BASE_URL + feature.name.lower()
@@ -38,6 +39,7 @@ def before_feature(context, feature):
 
 def before_scenario(context, scenario):
     LOGGER.debug("Scenario tags: %s", scenario.tags)
+    LOGGER.debug("Scenario Name: %s", scenario.name)
 
     if "project_id" in scenario.tags:
 
@@ -95,6 +97,11 @@ def create_section(context, project_id, section_name):
 
 
 def get_all_projects(context):
+    """
+    Method to get all projects
+    :param context:   object    Store contextual information about test
+    :return:
+    """
     response = RestClient().send_request(method_name="get", session=context.session,
                                          url=context.url + "projects", headers=context.headers)
 
