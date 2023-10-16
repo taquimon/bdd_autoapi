@@ -16,7 +16,7 @@ Feature: Projects
     Given I set the base url and headers
     When I call to projects endpoint using "GET" method using the "project_id" as parameter
     Then I receive a 200 status code in response
-    And I validate the response data
+    And I validate the response data from database
 
   Scenario: Verify POST project endpoint creates a project with the name provided
 
