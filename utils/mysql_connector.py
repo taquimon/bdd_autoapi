@@ -5,10 +5,10 @@ class MYSQLConnector:
 
     def __init__(self):
         self.mydb = mysql.connector.connect(
-            host="",
-            user="",
-            password="",
-            database=""
+            host="localhost",
+            user="root",
+            password="Planet1@",
+            database="todo_data"
         )
         print(self.mydb)
 

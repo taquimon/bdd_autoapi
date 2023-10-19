@@ -7,7 +7,7 @@ steps_todo.py
 import json
 import logging
 
-from behave import given, when, then, step, use_step_matcher
+from behave import given, when, then, step
 
 from utils.logger import get_logger
 from utils.rest_client import RestClient
@@ -15,27 +15,42 @@ from utils.validate_response import ValidateResponse
 
 LOGGER = get_logger(__name__, logging.DEBUG)
 
-# use_step_matcher("re")
-
 
 @given('I set the base url and headers')
 def step_set_base_url(context):
+    """
+    step to set the base url
+    :param context:
+    :return:
+    """
     LOGGER.debug("HEADERS: %s", context.headers)
     LOGGER.debug("URL: %s", context.url)
-  
+
 
 @then('I receive a {status_code:d} status code in response')
 def step_verify_status_code(context, status_code):
+    """
+    Step to verify status code
+    :param context:
+    :param status_code:
+    :return:
+    """
     LOGGER.debug("Status code from response: %s", context.response["status"])
-    LOGGER.debug("Status code param: %s", type(status_code))
-    LOGGER.debug("Status code response: %s", type(context.response["status"]))
     context.status_code = status_code
-    assert int(status_code) == context.response["status"], " Expected 200 but received " + str(context.response["status"])
+    assert int(status_code) == context.response["status"], (
+            " Expected 200 but received " + str(context.response["status"]))
 
 
-# @step(u'I call to projects endpoint using "(\\w*)" method( using the "([\\w\\s]*)" as parameter)*')
 @step('I call to {feature} endpoint using "{method_name}" method using the "{param}" as parameter')
 def step_call_endpoint(context, feature, method_name, param):
+    """
+    Step to call endpoint according to parameters send
+    :param context:
+    :param feature:
+    :param method_name:
+    :param param:
+    :return:
+    """
     # url base "https://api.todoist.com/rest/v2/" + feature .ie. projects, sections, tasks, etc.
     url = context.url + context.feature_name
     data = None
@@ -56,9 +71,9 @@ def step_call_endpoint(context, feature, method_name, param):
 
     # update the url with resources id created
 
-    response = RestClient().send_request(method_name=method_name.lower(), 
+    response = RestClient().send_request(method_name=method_name.lower(),
                                          session=context.session,
-                                         url=url, 
+                                         url=url,
                                          headers=context.headers,
                                          data=data)
 
@@ -86,6 +101,11 @@ def step_impl(context, option):
 
 
 def get_url_by_feature(context):
+    """
+
+    :param context:
+    :return:
+    """
     feature_id = None
     if context.feature_name == "projects":
         feature_id = context.project_id
@@ -112,6 +132,11 @@ def append_to_resources_list(context, response):
 
 
 def get_data_by_feature(context):
+    """
+
+    :param context:
+    :return:
+    """
     LOGGER.debug("JSON: %s", context.text)
     dictionary = json.loads(context.text)
     if context.feature_name == "projects":
@@ -131,7 +156,7 @@ def get_data_by_feature(context):
 
 
 @when("I want close the task")
-def step_impl(context):
+def step_close_task(context):
     """
     :type context: behave.runner.Context
     """
@@ -144,7 +169,7 @@ def step_impl(context):
 
 
 @then("I want to reopen the task")
-def step_impl(context):
+def step_reopen_task(context):
     """
     :type context: behave.runner.Context
     """
