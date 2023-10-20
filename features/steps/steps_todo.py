@@ -62,14 +62,6 @@ def step_call_endpoint(context, feature, method_name, param):
             data = get_data_by_feature(context)
     elif method_name == "DELETE" or (method_name == "GET" and param != "None"):
         url = get_url_by_feature(context)
-    # if context.table:
-    #     LOGGER.debug("Table: %s", context.table)
-    #     index = 0
-    #     for table in context.table:
-    #         LOGGER.debug("row: %s", table[index])
-    #         index += 1
-
-    # update the url with resources id created
 
     response = RestClient().send_request(method_name=method_name.lower(),
                                          session=context.session,
@@ -87,16 +79,20 @@ def step_call_endpoint(context, feature, method_name, param):
     context.method = method_name
 
 
-@step("I validate the response data from {option}")
-def step_impl(context, option):
+@step("I validate the response data from {option} using {list}")
+def step_impl(context, option, list):
     """
+    :param list:
     :param option:  str     option to validate response can be: file or database
     :type context: behave.runner.Context
     """
+    feature = context.feature_name
+    if list == "all":
+        feature = f"{context.feature_name}_all"
     ValidateResponse().validate_response(actual_response=context.response,
                                          method=context.method.lower(),
                                          expected_status_code=context.status_code,
-                                         feature=context.feature_name,
+                                         feature=feature,
                                          option=option)
 
 
@@ -125,10 +121,14 @@ def append_to_resources_list(context, response):
     :param context:
     :param response:
     """
+    LOGGER.debug("Append to resource list")
+    LOGGER.debug("Feature: %s", context.feature_name)
     if context.feature_name == "projects":
-        context.project_list.append(response["body"]["id"])
+        context.resource_list["projects"].append(response["body"]["id"])
     if context.feature_name == "sections":
-        context.section_list.append(response["body"]["id"])
+        context.resource_list["sections"].append(response["body"]["id"])
+    if context.feature_name == "tasks":
+        context.resource_list["tasks"].append(response["body"]["id"])
 
 
 def get_data_by_feature(context):
