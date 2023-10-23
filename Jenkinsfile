@@ -14,7 +14,7 @@ pipeline {
             steps {
                 withPythonEnv('python3') {
                     sh 'pip install -r requirements.txt'
-                    sh 'python3 -m behave'
+                    sh 'python3 -m behave -f allure_behave.formatter:AllureFormatter -o allure-results'
                 }
             }
         }
