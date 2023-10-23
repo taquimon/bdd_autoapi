@@ -7,11 +7,11 @@ environment.py
 import logging
 
 import requests
-from influxdb_client import Point
-from influxdb_client.client.write_api import SYNCHRONOUS
+# from influxdb_client import Point
+# from influxdb_client.client.write_api import SYNCHRONOUS
 
 from config.config import BASE_URL, HEADERS
-from utils.influx import get_influx
+# from utils.influx import get_influx
 from utils.logger import get_logger
 from utils.rest_client import RestClient
 
@@ -89,24 +89,24 @@ def before_scenario(context, scenario):
         context.resource_list["tasks"].append(context.task_id)
 
 
-def after_scenario(context, scenario):
-    """
-    Method to execute instructions after scenario
-    :param context:
-    :param scenario:
-    :return:
-    """
-    client = get_influx()
-    write_api = client.write_api(write_options=SYNCHRONOUS)
-    bucket = "todo_bucket"
-    LOGGER.debug("after scenario")
-    p = (Point("test_case_execution").tag("id_tc", scenario.tags)
-         .tag("feature", context.feature_name)
-         .tag("test_case_name", scenario.name)
-         .tag("status", scenario.status)
-         .field("duration", scenario.duration)
-         )
-    write_api.write(bucket=bucket, record=p)
+# def after_scenario(context, scenario):
+#     """
+#     Method to execute instructions after scenario
+#     :param context:
+#     :param scenario:
+#     :return:
+#     """
+#     client = get_influx()
+#     write_api = client.write_api(write_options=SYNCHRONOUS)
+#     bucket = "todo_bucket"
+#     LOGGER.debug("after scenario")
+#     p = (Point("test_case_execution").tag("id_tc", scenario.tags)
+#          .tag("feature", context.feature_name)
+#          .tag("test_case_name", scenario.name)
+#          .tag("status", scenario.status)
+#          .field("duration", scenario.duration)
+#          )
+#     write_api.write(bucket=bucket, record=p)
 
 
 def after_feature(context, feature):
