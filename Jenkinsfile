@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Run Python Scripts') {
             steps {
-                withPythonEnv(python3) {
+                withPythonEnv('python3') {
                     sh 'pip install -r requirements.txt'
                     sh 'python3 -m behave'
                 }
